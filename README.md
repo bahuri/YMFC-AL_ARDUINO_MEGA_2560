@@ -7,3 +7,6 @@ I will be updating with the following changes:
     1. Add Arduino Mega support.
     
     2.Use of magnemtometer.
+    
+    RX CONNECTED TO ANALOG INPUT PIN 8,9,10,11
+    ESC CONNECTED TO ANALOG PIN 4,5,6,7
