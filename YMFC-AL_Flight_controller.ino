@@ -82,8 +82,8 @@ void setup(){
   TWBR = 12;                                                                //Set the I2C clock speed to 400kHz.
 
   //Arduino (Atmega) pins default to inputs, so they don't need to be explicitly declared as inputs.
-  DDRF |= B11110000;                                                        //Configure digital poort 4, 5, 6 and 7 as output.
-  DDRB |= B00110000;                                                        //Configure digital poort 12 and 13 as output.
+  DDRF |= B11110000;                                                        //Configure Analog port 4, 5, 6 and 7 as output.
+  DDRB |= B00110000;                                                        //Configure digital port 12 and 13 as output.
 
   //Use the led on the Arduino for startup indication.
   digitalWrite(12,HIGH);                                                    //Turn on the warning led.
@@ -98,9 +98,9 @@ void setup(){
   set_gyro_registers();                                                     //Set the specific gyro registers.
 
   for (cal_int = 0; cal_int < 1250 ; cal_int ++){                           //Wait 5 seconds before continuing.
-    PORTF |= B11110000;                                                     //Set digital poort 4, 5, 6 and 7 high.
+    PORTF |= B11110000;                                                     //Set Analog port 4, 5, 6 and 7 high.
     delayMicroseconds(1000);                                                //Wait 1000us.
-    PORTF &= B00001111;                                                     //Set digital poort 4, 5, 6 and 7 low.
+    PORTF &= B00001111;                                                     //Set Analog port 4, 5, 6 and 7 low.
     delayMicroseconds(3000);                                                //Wait 3000us.
   }
 
@@ -112,9 +112,9 @@ void setup(){
     gyro_axis_cal[2] += gyro_axis[2];                                       //Ad pitch value to gyro_pitch_cal.
     gyro_axis_cal[3] += gyro_axis[3];                                       //Ad yaw value to gyro_yaw_cal.
     //We don't want the esc's to be beeping annoyingly. So let's give them a 1000us puls while calibrating the gyro.
-    PORTF |= B11110000;                                                     //Set digital poort 4, 5, 6 and 7 high.
+    PORTF |= B11110000;                                                     //Set Analog PORT 4, 5, 6 and 7 high.
     delayMicroseconds(1000);                                                //Wait 1000us.
-    PORTF &= B00001111;                                                     //Set digital poort 4, 5, 6 and 7 low.
+    PORTF &= B00001111;                                                     //Set  Analog PORT 4, 5, 6 and 7 low.
     delay(3);                                                               //Wait 3 milliseconds before the next loop.
   }
   //Now that we have 2000 measures, we need to devide by 2000 to get the average gyro offset.
@@ -123,10 +123,10 @@ void setup(){
   gyro_axis_cal[3] /= 2000;                                                 //Divide the yaw total by 2000.
 
   PCICR |= (1 << PCIE2);    // set PCIE0 to enable PCMSK0 scan
-  PCMSK2 |= (1 << PCINT16);  // set PCINT0 (digital input 8) to trigger an interrupt on state change
-  PCMSK2 |= (1 << PCINT17);  // set PCINT1 (digital input 9)to trigger an interrupt on state change
-  PCMSK2 |= (1 << PCINT18);  // set PCINT2 (digital input 10)to trigger an interrupt on state change
-  PCMSK2 |= (1 << PCINT19);                                                  //Set PCINT3 (digital input 11)to trigger an interrupt on state change.
+  PCMSK2 |= (1 << PCINT16);  // set PCINT16 (digital input 8) to trigger an interrupt on state change
+  PCMSK2 |= (1 << PCINT17);  // set PCINT17 (digital input 9)to trigger an interrupt on state change
+  PCMSK2 |= (1 << PCINT18);  // set PCINT18 (digital input 10)to trigger an interrupt on state change
+  PCMSK2 |= (1 << PCINT19);                                                  //Set PCINT19 (digital input 11)to trigger an interrupt on state change.
 
   //Wait until the receiver is active and the throtle is set to the lower position.
   while(receiver_input_channel_3 < 990 || receiver_input_channel_3 > 1020 || receiver_input_channel_4 < 1400){
@@ -134,9 +134,9 @@ void setup(){
     receiver_input_channel_4 = convert_receiver_channel(4);                 //Convert the actual receiver signals for yaw to the standard 1000 - 2000us
     start ++;                                                               //While waiting increment start whith every loop.
     //We don't want the esc's to be beeping annoyingly. So let's give them a 1000us puls while waiting for the receiver inputs.
-    PORTF |= B11110000;                                                     //Set digital poort 4, 5, 6 and 7 high.
+    PORTF |= B11110000;                                                     //Set  Analog PORT 4, 5, 6 and 7 high.
     delayMicroseconds(1000);                                                //Wait 1000us.
-    PORTF &= B00001111;                                                     //Set digital poort 4, 5, 6 and 7 low.
+    PORTF &= B00001111;                                                     //Set  Analog PORT 4, 5, 6 and 7 low.
     delay(3);                                                               //Wait 3 milliseconds before the next loop.
     if(start == 125){                                                       //Every 125 loops (500ms).
       digitalWrite(12, !digitalRead(12));                                   //Change the led status.
